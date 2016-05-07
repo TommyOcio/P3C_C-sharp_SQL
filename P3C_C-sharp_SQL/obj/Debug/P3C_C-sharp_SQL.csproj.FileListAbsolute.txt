@@ -1,1 +1,12 @@
 D:\visual studio 2015\Projects\P3C_C-sharp_SQL\P3C_C-sharp_SQL\bin\Debug\P3C_C-sharp_SQL.exe.config
+D:\visual studio 2015\Projects\P3C_C-sharp_SQL\P3C_C-sharp_SQL\obj\Debug\P3C_C-sharp_SQL.csprojResolveAssemblyReference.cache
+D:\visual studio 2015\Projects\P3C_C-sharp_SQL\P3C_C-sharp_SQL\obj\Debug\P3C_C_sharp_SQL.Properties.Resources.resources
+D:\visual studio 2015\Projects\P3C_C-sharp_SQL\P3C_C-sharp_SQL\obj\Debug\P3C_C-sharp_SQL.csproj.GenerateResource.Cache
+D:\visual studio 2015\Projects\P3C_C-sharp_SQL\P3C_C-sharp_SQL\obj\Debug\P3C_C_sharp_SQL.Autentificacion.resources
+D:\visual studio 2015\Projects\P3C_C-sharp_SQL\P3C_C-sharp_SQL\obj\Debug\P3C_C_sharp_SQL.Buscar.resources
+D:\visual studio 2015\Projects\P3C_C-sharp_SQL\P3C_C-sharp_SQL\obj\Debug\P3C_C_sharp_SQL.Form1.resources
+D:\visual studio 2015\Projects\P3C_C-sharp_SQL\P3C_C-sharp_SQL\obj\Debug\P3C_C_sharp_SQL.Registro_Usuarios.resources
+D:\visual studio 2015\Projects\P3C_C-sharp_SQL\P3C_C-sharp_SQL\bin\Debug\P3C_C-sharp_SQL.exe
+D:\visual studio 2015\Projects\P3C_C-sharp_SQL\P3C_C-sharp_SQL\bin\Debug\P3C_C-sharp_SQL.pdb
+D:\visual studio 2015\Projects\P3C_C-sharp_SQL\P3C_C-sharp_SQL\obj\Debug\P3C_C-sharp_SQL.exe
+D:\visual studio 2015\Projects\P3C_C-sharp_SQL\P3C_C-sharp_SQL\obj\Debug\P3C_C-sharp_SQL.pdb

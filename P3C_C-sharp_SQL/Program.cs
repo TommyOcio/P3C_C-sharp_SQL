@@ -16,7 +16,7 @@ namespace P3C_C_sharp_SQL
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Autentificacion());
         }
     }
 }
