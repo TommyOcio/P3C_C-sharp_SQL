@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Security.Cryptography;
-
+using System.Data.SqlClient;
 
 namespace P3C_C_sharp_SQL
 {
@@ -25,37 +25,43 @@ namespace P3C_C_sharp_SQL
 
         private void btnEntrar_Click(object sender, EventArgs e)
         {
+            string mensaje1 = "", mensaje2 = "";
+            if (string.IsNullOrEmpty(txtUsuario.Text))
+                mensaje1 = "Debe ingresar el usuario";
+            if (string.IsNullOrEmpty(txtContraseña.Text))
+                mensaje2 = "Debe ingresar La contraseña";
+            if(mensaje1 != "" || mensaje2 != "")
+            {
+                MessageBox.Show(mensaje1+"\n"+ mensaje2, "Error de datos",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                return;
+            }
+
             string Cotraseña = Encrypt(txtContraseña.Text);
+            if (BDComun.ObtnerCOnexion().State != ConnectionState.Open)
+            {
+                MessageBox.Show("Error en la Conexion", "Error en la Conexion", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             pUsuario = UsuarioDAL.Autentificar(txtUsuario.Text, Cotraseña);
-            if (pUsuario.Id > 0)
+            if(pUsuario.Nombre!=null)
             {
                 this.Hide();
-                Form1 f = new Form1();
-                //f.pUsuario.Id = pUsuario.Id;
-                //f.pUsuario.Nombre = pUsuario.Nombre;
-                //f.ShowDialog();
+                Form1 pForm1 = new Form1();
 
-
-                if (((f == null) || (!f.IsHandleCreated)))
+                if (((pForm1 == null) || (!pForm1.IsHandleCreated)))
                 {
-                    f = new Form1();
+                    pForm1 = new Form1();
                 }
 
-                // Llamamos al formulario de manera modal.
-                //
-                f.pUsuario.Id = pUsuario.Id;
-                f.pUsuario.Nombre = pUsuario.Nombre;
-                f.ShowDialog();
+                pForm1.pUsuario.Id = pUsuario.Id;
+                pForm1.pUsuario.Nombre = pUsuario.Nombre;
+                pForm1.ShowDialog();
 
-                //MessageBox.Show("Se ha cerrado el formulario.");
-
-                // Destruimos el formulario.
-                //
-                f.Dispose();
+                pForm1.Dispose();
                 this.Show();
-            }
-            else
-                MessageBox.Show("Error en los datos");
+            }else
+            MessageBox.Show("El Usuario y la contraseña que has introducido no coinciden", "Error de Autenticación", MessageBoxButtons.OK, MessageBoxIcon.Question);
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
@@ -99,8 +105,42 @@ namespace P3C_C_sharp_SQL
             return Convert.ToBase64String(encrypted);
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string rpta = "";
+            //string CN = "Server = mcastro/SQLEXPRESS; Database = Fotografia; Trusted_Connection = True";
+            string CN = "Data source=SOPORTETIi; Initial Catalog=sape; User Id=sa; Password=upt";
+            SqlConnection sqlcon = new SqlConnection();
 
+            try
+            {
+                sqlcon.ConnectionString = CN;
+                sqlcon.Open();
+            }
 
+            catch (Exception ex)
+            {
+                rpta = ex.Message;
+            }
 
+            if (sqlcon.State == ConnectionState.Open)
+                MessageBox.Show("ok");
+            else
+                MessageBox.Show("no se conecto");
+
+            
+        }
+
+        private void btnCerrar_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void Autentificacion_Load(object sender, EventArgs e)
+        {
+            DateTime thisDay = DateTime.Today;
+
+            label4.Text = thisDay.ToString("D");
+        }
     }
 }

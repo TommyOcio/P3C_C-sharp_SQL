@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Data;
+using System.Windows.Forms;
 
 namespace P3C_C_sharp_SQL
 {
@@ -32,8 +34,7 @@ namespace P3C_C_sharp_SQL
 
             SqlConnection conexion = BDComun.ObtnerCOnexion();
 
-            SqlCommand comando = new SqlCommand(string.Format(
-                "Select * From Usuarios Where Nombre = '{0}' and Contraseña = '{1}'", pUsuarios, pContraseña), conexion);
+            SqlCommand comando = new SqlCommand(string.Format("Select * From Usuarios Where Nombre = '{0}' and Contraseña = '{1}'", pUsuarios, pContraseña), conexion);
 
             SqlDataReader reader = comando.ExecuteReader();
 
@@ -44,8 +45,10 @@ namespace P3C_C_sharp_SQL
                 pUsuario.Contraseña = reader.GetString(2);
             }
 
-            conexion.Close();
+            BDComun.CerrarConexion(conexion);
+
             return pUsuario;
+
         }
 
 
