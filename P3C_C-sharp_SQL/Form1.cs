@@ -166,10 +166,6 @@ namespace P3C_C_sharp_SQL
         {
 
             Registro_Usuarios pRegistro_Usuarios = new Registro_Usuarios();
-            //f.pUsuario.Id = pUsuario.Id;
-            //f.pUsuario.Nombre = pUsuario.Nombre;
-            //f.ShowDialog();
-
 
             if (((pRegistro_Usuarios == null) || (!pRegistro_Usuarios.IsHandleCreated)))
             {

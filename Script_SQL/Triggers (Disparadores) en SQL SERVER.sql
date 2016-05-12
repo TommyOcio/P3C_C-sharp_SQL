@@ -177,24 +177,95 @@ GO
 
 
 --3
-IF OBJECT_ID('REPLICAPASAJERO') IS NOT NULL
+IF OBJECT_ID('EVE_ALUMNO_LOG') IS NOT NULL
 BEGIN
-       DROP TRIGGER REPLICAPASAJERO
+       DROP TRIGGER EVE_ALUMNO_LOG
 END
 GO
 
 
 --4
-CREATE TRIGGER REPLICAPASAJERO
-ON PASAJERO
-AFTER INSERT
+CREATE TRIGGER EVE_ALUMNO_LOG
+ON Alumnos
+AFTER INSERT, UPDATE
 AS
 BEGIN
-       INSERT PASAJEROSBAK
-             SELECT * FROM INSERTED
+
+	PRINT 'MENSAJE DISPARADO DE LA INSERCION O ACTUALIZACION DE LA TABLA PASAJERO'
+
+	DECLARE @IDALUMNO INT, @NOMBRE VARCHAR(50), @APELLIDO VARCHAR(50),@DIRECCION VARCHAR(1000), @CONDICION VARCHAR(50), @FECHA_NACIMIENTO date
+
+
+    SELECT @IDALUMNO=INSERTED.Id, @NOMBRE=INSERTED.Nombre, @APELLIDO=INSERTED.Apellido,@DIRECCION =INSERTED.Direccion,  @FECHA_NACIMIENTO = INSERTED.Fecha_nacimiento  FROM INSERTED
+
+	begin
+        --Si hay valores en la tabla deleted y además todos(excepto 
+        --editable y id) son diferentes a los nuevos valores insertados,
+        --significa que ha habido un update
+        if exists(select * from deleted d join inserted i on  d.id=i.id 
+		where d.nombre != i.nombre or d.apellido != i.apellido or d.Direccion != i.Direccion or d.Fecha_nacimiento != i.Fecha_nacimiento)
+        begin
+            set @CONDICION ='Accion Actualizacion'
+            
+			INSERT INTO [dbo].[ALUMNO_LOG]([IDALUMNO],[NOMBRE],[APELLIDO],[DIRECCION],[FECHA_NACIMIENTO],[CONDICION],[FECHAEVENTO])
+            VALUES(@IDALUMNO,@NOMBRE,@APELLIDO,@DIRECCION, @FECHA_NACIMIENTO,@CONDICION,GETDATE())
+        end
+        --Si no ha habido un update hay valores sólo en la tabla inserted
+        --y eso significa que ha habido un insert.No se debe olvidar
+        --que un update es un delete y un insert.
+        else if exists(select id from inserted) and not exists(select id from deleted)
+        begin
+            set @CONDICION ='Accion Creado'
+            INSERT INTO [dbo].[ALUMNO_LOG]([IDALUMNO],[NOMBRE],[APELLIDO],[DIRECCION],[FECHA_NACIMIENTO],[CONDICION],[FECHAEVENTO])
+            VALUES(@IDALUMNO,@NOMBRE,@APELLIDO,@DIRECCION, @FECHA_NACIMIENTO,@CONDICION,GETDATE())
+        end
+    end
 END
 
 GO
+
+
+create trigger trg_Example
+on Empleado
+after insert,update
+as
+begin
+    declare
+    @idEmp int,
+    @nombre varchar(20),
+    @apellido varchar(20),
+    @edad int,
+    @editable varchar(2),
+    @accion varchar (20)
+
+    select @idEmp=id,@nombre=nombre,@apellido=apellido,@edad=edad,
+            @editable=editable
+            from inserted
+    begin
+        --Si hay valores en la tabla deleted y además todos(excepto 
+        --editable y id) son diferentes a los nuevos valores insertados,
+        --significa que ha habido un update
+        if exists(select * from deleted d join inserted i on 
+                    d.id=i.id where d.nombre != i.nombre or 
+                    d.apellido != i.apellido or d.edad != i.edad)
+        begin
+            set @accion ='record updated'
+            insert into Empleado_Log values(@idEmp,@nombre,@apellido,
+                                            @edad,@editable,@accion)
+        end
+        --Si no ha habido un update hay valores sólo en la tabla inserted
+        --y eso significa que ha habido un insert.No se debe olvidar
+        --que un update es un delete y un insert.
+        else if exists(select id from inserted) 
+                            and not exists(select id from deleted)
+        begin
+            set @accion ='record inserted'
+            insert into Empleado_Log values(@idEmp,@nombre,@apellido,
+                                                @edad,@editable,@accion)
+        end
+    end
+end
+
 
 
 INSERT INTO PASAJERO

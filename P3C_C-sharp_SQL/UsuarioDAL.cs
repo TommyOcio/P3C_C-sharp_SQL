@@ -26,8 +26,6 @@ namespace P3C_C_sharp_SQL
             return resultado;
         }
 
-
-
         public static Usuario Autentificar(String pUsuarios, String pContraseña)
         {
             Usuario pUsuario = new Usuario();
@@ -49,6 +47,18 @@ namespace P3C_C_sharp_SQL
 
             return pUsuario;
 
+        }
+
+        public static void ControlAcceso(string pUsuario, string pDireccionIp, string pUsuarioPc, string pCondicion)
+        {
+            int resultado = 0;
+
+            SqlConnection Conn = BDComun.ObtnerCOnexion();
+
+            SqlCommand Comando = new SqlCommand(string.Format("INSERT INTO [dbo].[LOGACCESO]([USUARIO],[CONDICION],[IP],[USUARIOPC],[FECHA]) VALUES('{0}','{1}','{2}','{3}',GETDATE())", pUsuario, pDireccionIp, pUsuarioPc, pCondicion), Conn);
+
+            resultado = Comando.ExecuteNonQuery();
+            Conn.Close();
         }
 
 
